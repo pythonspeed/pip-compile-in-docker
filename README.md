@@ -40,6 +40,8 @@ flask==2.0.2 \
 
 (Choose the matching Docker image for whatever Python version you actually use in production.)
 
+All requirements will be updated to their latest version whenever the script is run.
+
 Check-in both `requirements.in` and `requirements.txt` into version control, install your application dependencies using the latter, and update your dependencies by re-running this command.
 
 To learn more about what the tool is doing, see the [underlying `pip-tools` documentation](https://github.com/jazzband/pip-tools/).

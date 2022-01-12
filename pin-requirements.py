@@ -47,7 +47,7 @@ set -e
 python3 -m venv /tmp/venv3
 . /tmp/venv3/bin/activate
 pip install --upgrade pip pip-tools
-pip-compile --generate-hashes "--output-file=$1" "$0"
+pip-compile --generate-hashes --upgrade "--output-file=$1" "$0"
 """
 
 
