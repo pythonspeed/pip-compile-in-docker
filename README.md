@@ -3,7 +3,7 @@
 `pin-requirements.py` is a script that lets you pin your Python dependencies inside a Docker container.
 
 * Pinning your dependencies is great because it gives you reproducible builds.
-  [See below for more motivations](#motivation).
+  [See below for more motivation](#motivation).
 * `pip` installs different dependencies depending on the version of Python, and which operating system you're using.
   So if you're deploying on Linux, doing the pinning inside Docker means you get consistent, correct pinning.
 
@@ -83,6 +83,4 @@ flask>=1.0
 ```
 
 And then you use `pip-tools` to convert that to a pinned `requirements.txt` you
-can use in your project. `setup.py`/`setup.cfg` end up not including any
-dependencies at all (note that this setup is specific to applications; libraries
-are a different story).
+can use in your project.
