@@ -7,7 +7,7 @@
 * `pip` installs different dependencies depending on the version of Python, and which operating system you're using.
   So if you're deploying on Linux, doing the pinning inside Docker means you get consistent, correct pinning.
 
-`pin-requirements.py` is a script based on `pip-tools` that takes the
+`pin-requirements.py` is a script based on [`pip-tools`](https://github.com/jazzband/pip-tools) that takes the
 high-level requirements from `requirements.in` and transitively pins them to
 output file `requirements.txt`:
 
@@ -51,8 +51,12 @@ To learn more about what the tool is doing, see the [underlying `pip-tools` docu
 
 > Note that everything I'm discussing here is focused on applications; libraries are a whole different story.
 
-Every application really requires two different sets of dependency
-descriptions:
+On the one hand, you want your builds to be reproducible: whenever you package or install your software, it should install the same dependencies.
+Pinning your dependencies to specific versions is how you do this, and you want to pin all dependencies, including dependencies-of-dependencies.
+
+On the other hand, you need to update your dependencies... and a fully pinned set of dependencies is a pain in the ass to update, since it is overly constrained.
+
+Thus, every application really requires two different sets of dependency description files:
 
 1. The logical, direct dependencies. For example, "this needs at
    least Flask 1.0 to run".
@@ -68,19 +72,3 @@ dependencies when you want to upgrade (e.g. to get security updates).
 The second set of dependencies is what you should use to build the application,
 in order to get reproducible builds: that is, to ensure each build will have the
 exact same dependencies installed as the previous build.
-
-### Implementing pinned dependencies in `requirements.txt`
-
-Some alternatives include `pipenv` and `poetry`.
-
-Within the framework of existing packaging tools, however, [`pip-tools`](https://github.com/jazzband/pip-tools/) is the
-easiest way to take your logical requirement, and turn them into pinned
-requirements. You write a `requirements.in` file (in `requirements.txt` format)
-listing your direct dependencies in a flexible way:
-
-```requirements
-flask>=1.0
-```
-
-And then you use `pip-tools` to convert that to a pinned `requirements.txt` you
-can use in your project.
