@@ -42,6 +42,15 @@ from tempfile import NamedTemporaryFile
 from subprocess import check_output, CalledProcessError, check_call, STDOUT
 
 
+SCRIPT = """\
+set -e
+python3 -m venv /tmp/venv3
+. /tmp/venv3/bin/activate
+pip install --upgrade pip pip-tools
+pip-compile --generate-hashes "--output-file=$1" "$0"
+"""
+
+
 def main():
     """Run the program."""
     # Parse command-line arguments:
@@ -50,7 +59,8 @@ def main():
     )
     parser.add_argument(
         "--image",
-        help="Docker image to use for the build.",
+        help="Docker image to use for the build, e.g. 'python:3.9-slim'.",
+        required=True,
     )
     parser.add_argument(
         "--in_file", help="High-level requirements file", default="requirements.in"
@@ -86,9 +96,6 @@ def main():
     # In Docker container with current directory mounted as volume, running as
     # appropriate uid and gid, create virtualenv, install pip-tools, run
     # pip-compile. We use pip-compile's --generate-hashes for extra security.
-    script = (
-        'pip install pip-tools && pip-compile --generate-hashes "--output-file=$0" "$1"'
-    )
     out_file = NamedTemporaryFile(delete=False)
     out_file.close()
     check_call(
@@ -101,22 +108,33 @@ def main():
             "--env",
             "HOME=/tmp",
             "--mount",
-            "--type=bind,source={},target=/input".format(
+            "type=bind,source={},target=/input".format(
                 os.path.dirname(os.path.abspath(args.in_file))
             ),
             "--mount",
-            "--type=bind,source={},target=/output".format(
+            "type=bind,source={},target=/output".format(
                 os.path.dirname(os.path.abspath(args.out_file))
             ),
             "--entrypoint",
             "/bin/sh",
             args.image,
             "-c",
-            script,
+            SCRIPT,
             "/input/" + os.path.basename(args.in_file),
             "/output/" + os.path.basename(args.out_file),
         ]
     )
+
+    # Write out final requirements.txt with correct instructions:
+    with open(args.out_file) as f:
+        lines = f.read().splitlines()
+    with open(args.out_file, "w") as f:
+        f.write("# Automatically generated from requirements.in using:\n")
+        f.write("#   " + " ".join(sys.argv) + "\n")
+        f.write("#\n")
+        for line in lines:
+            if not line.startswith("#"):
+                f.write(line + "\n")
 
 
 if __name__ == "__main__":
