@@ -1,5 +1,3 @@
-> This tool is sponsored by the [Python on Docker Production Handbook](https://pythonspeed.com/products/productionhandbook/), your complete reference to packaging Python applications for Docker in production.
-
 # Pin your Python dependencies!
 
 `pin-requirements.py` is a script that lets you pin your Python dependencies inside a Docker container.
@@ -28,6 +26,8 @@ $ pin-requirements.py --image python:3.9-slim
 Choose the matching Docker image for whatever Python version you actually use in production.
 
 To learn more about what the tool is doing, see the [underlying `pip-tools` documentation](https://github.com/jazzband/pip-tools/).
+
+> <img src="https://pythonspeed.com/products/productionhandbook/cover.png" align="right" width="20%"> This tool is sponsored by the [Python on Docker Production Handbook](https://pythonspeed.com/products/productionhandbook/), your complete reference for packaging Python applications for Docker in production.
 
 ## Motivation: why you want to do this {#motivation}
 
