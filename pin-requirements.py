@@ -117,6 +117,8 @@ def main():
             ),
             "--entrypoint",
             "/bin/sh",
+            "-e",
+            "CUSTOM_COMPILE_COMMAND=" + " ".join(sys.argv),
             args.image,
             "-c",
             SCRIPT,
@@ -124,17 +126,6 @@ def main():
             "/output/" + os.path.basename(args.out_file),
         ]
     )
-
-    # Write out final requirements.txt with correct instructions:
-    with open(args.out_file) as f:
-        lines = f.read().splitlines()
-    with open(args.out_file, "w") as f:
-        f.write("# Automatically generated from requirements.in using:\n")
-        f.write("#   " + " ".join(sys.argv) + "\n")
-        f.write("#\n")
-        for line in lines:
-            if not line.startswith("#"):
-                f.write(line + "\n")
 
 
 if __name__ == "__main__":
