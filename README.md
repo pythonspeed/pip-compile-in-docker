@@ -23,13 +23,31 @@ And then run:
 $ pin-requirements.py --image python:3.9-slim
 ```
 
-Choose the matching Docker image for whatever Python version you actually use in production.
+You will now have a `requirements.txt` file that looks a little like this:
+
+```
+# ...
+click==8.0.3 \
+    --hash=sha256:353f466495adaeb40b6b5f592f9f91cb22372351c84caeb068132442a4518ef3 \
+    --hash=sha256:410e932b050f5eed773c4cda94de75971c89cdb3155a72a0831139a79e5ecb5b
+    # via flask
+flask==2.0.2 \
+    --hash=sha256:7b2fb8e934ddd50731893bdcdb00fc8c0315916f9fcd50d22c7cc1a95ab634e2 \
+    --hash=sha256:cb90f62f1d8e4dc4621f52106613488b5ba826b2e1e10a33eac92f723093ab6a
+    # via -r /input/requirements.in
+# ...
+```
+
+(Choose the matching Docker image for whatever Python version you actually use in production.)
+
+Check-in both `requirements.in` and `requirements.txt` into version control, install your application dependencies using the latter, and update your dependencies by re-running this command.
 
 To learn more about what the tool is doing, see the [underlying `pip-tools` documentation](https://github.com/jazzband/pip-tools/).
 
-> <img src="https://pythonspeed.com/products/productionhandbook/cover.png" align="right" width="20%"> This tool is sponsored by the [Python on Docker Production Handbook](https://pythonspeed.com/products/productionhandbook/), your complete reference for packaging Python applications for Docker in production.
+> <a href="https://pythonspeed.com/products/productionhandbook/"><img src="https://pythonspeed.com/products/productionhandbook/cover.png" align="right" width="20%"></a> This tool is sponsored by the [Python on Docker Production Handbook](https://pythonspeed.com/products/productionhandbook/), your complete reference for packaging Python applications for Docker in production.
+> <br clear="right">
 
-## Motivation: why you want to do this {#motivation}
+## Motivation
 
 > Note that everything I'm discussing here is focused on applications; libraries are a whole different story.
 
